@@ -1,9 +1,11 @@
+#![warn(clippy::pedantic)]
+
 use anyhow::{Context, Result as AHResult};
 use clap::Parser;
+use model::{Cli, Commands};
 use std::fs::File;
 use std::io::{BufReader, Read, Write};
 
-use model::*;
 mod model;
 
 fn mixer<R: Read, W: Write>(r: &mut [R], w: &mut W) -> Result<(), std::io::Error> {
@@ -20,7 +22,7 @@ fn mixer<R: Read, W: Write>(r: &mut [R], w: &mut W) -> Result<(), std::io::Error
             *buf_p = byte[0];
         }
 
-        w.write(&buf)?;
+        w.write_all(&buf)?;
     }
 
     Ok(())
@@ -61,7 +63,7 @@ fn splitter<R: Read, W: Write>(r: &mut R, w: &mut [W]) -> Result<(), std::io::Er
         }
 
         for (b, f) in buf.iter().zip(w.iter_mut()) {
-            f.write(&[*b])?;
+            f.write_all(&[*b])?;
         }
     }
 
@@ -107,7 +109,7 @@ fn splitter_test_2() {
 }
 
 fn main() -> AHResult<()> {
-    let cli = model::Cli::parse();
+    let cli = Cli::parse();
 
     match cli.command {
         Commands::Mix {
