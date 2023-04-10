@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{Context, Result as AHResult};
 use clap::Parser;
 use std::fs::File;
 use std::io::{BufReader, Read, Write};
@@ -6,21 +6,21 @@ use std::io::{BufReader, Read, Write};
 use model::*;
 mod model;
 
-fn mixer<R: Read, W: Write>(r: &mut [R], w: &mut W) -> Result<()> {
+fn mixer<R: Read, W: Write>(r: &mut [R], w: &mut W) -> Result<(), std::io::Error> {
     let mut buf = vec![0; r.len()];
 
     'write_loop: loop {
         for (buf_p, f) in buf.iter_mut().zip(r.iter_mut()) {
             let mut byte = [0];
 
-            if f.read(&mut byte).with_context(|| "Failed to read input")? == 0 {
+            if f.read(&mut byte)? == 0 {
                 break 'write_loop;
             }
 
             *buf_p = byte[0];
         }
 
-        w.write(&buf).with_context(|| "Failed to write output")?;
+        w.write(&buf)?;
     }
 
     Ok(())
@@ -52,7 +52,7 @@ fn mixer_test_2() {
     assert_eq!(out_s, "HWeolrllod");
 }
 
-fn splitter<R: Read, W: Write>(r: &mut R, w: &mut [W]) -> Result<()> {
+fn splitter<R: Read, W: Write>(r: &mut R, w: &mut [W]) -> Result<(), std::io::Error> {
     let mut buf = vec![0; w.len()];
 
     loop {
@@ -61,7 +61,7 @@ fn splitter<R: Read, W: Write>(r: &mut R, w: &mut [W]) -> Result<()> {
         }
 
         for (b, f) in buf.iter().zip(w.iter_mut()) {
-            f.write(&[*b]).with_context(|| "Failed to write file")?;
+            f.write(&[*b])?;
         }
     }
 
@@ -106,7 +106,7 @@ fn splitter_test_2() {
     assert_eq!(out_s, "World!");
 }
 
-fn main() -> Result<()> {
+fn main() -> AHResult<()> {
     let cli = model::Cli::parse();
 
     match cli.command {
