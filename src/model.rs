@@ -12,9 +12,9 @@ pub struct Cli {
 pub enum Commands {
     #[command(about = "Mix binaries into a binary")]
     Mix {
-        #[arg(short, required = true)]
+        #[arg(required = true)]
         inputs: Vec<PathBuf>,
-        #[arg(short)]
+        #[arg(required = true)]
         output: PathBuf,
         #[arg(short)]
         force: bool,
@@ -23,9 +23,9 @@ pub enum Commands {
     #[command(arg_required_else_help = true)]
     #[command(about = "Split a binary into binaries")]
     Split {
-        #[arg(short)]
+        #[arg(required = true)]
         input: PathBuf,
-        #[arg(short, required = true)]
+        #[arg(required = true)]
         outputs: Vec<PathBuf>,
         #[arg(short)]
         force: bool,
