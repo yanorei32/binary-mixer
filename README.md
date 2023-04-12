@@ -5,7 +5,7 @@
 A simple binary mix utility.
 This created for decode a ROM of 8-bit EPROM x2 used as 16-bit EPROM.
 
-![image](https://user-images.githubusercontent.com/11992915/231277446-857d2a66-cb5f-48b1-8412-73c365cbed13.png)
+![image](https://user-images.githubusercontent.com/11992915/231426589-7beeb5bd-6bda-4486-8f01-0d73654dd917.png)
 
 ## Installation
 
