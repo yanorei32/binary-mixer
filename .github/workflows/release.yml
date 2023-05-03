@@ -83,7 +83,7 @@ jobs:
               VERSION_NAME=${VERSION_NAME:1}
           fi
           echo "$VERSION_NAME" > binary-mixer/VERSION.txt
-          cp config.yml LICENSE README.md binary-mixer/
+          cp LICENSE README.md binary-mixer/
           cp target/x86_64-pc-windows-gnu/release/binary-mixer.exe binary-mixer/
           zip -r binary-mixer-windows.zip binary-mixer
           rm binary-mixer/*.exe
